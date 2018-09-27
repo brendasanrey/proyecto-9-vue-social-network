@@ -42,8 +42,8 @@
     </v-toolbar>
     <!-- Contenido de la app -->
     <main>
-      <v-container class="mt-5">
-        <transition name="fade">
+      <v-container class=" mt-5 ">
+        <transition name="fade ">
           <router-view/>
         </transition>
       </v-container>
