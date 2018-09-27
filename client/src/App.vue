@@ -13,7 +13,7 @@
       <v-divider></v-divider>
       <!-- iconos/enlaces -->
       <v-list>
-        <v-list-tile v-for="item in itemsOfSideNav" :key="item.title" :to="item.link">
+        <v-list-tile ripple v-for="item in itemsOfSideNav" :key="item.title" :to="item.link">
           <v-list-tile-action>
             <v-icon>{{item.icon}}</v-icon>
           </v-list-tile-action>
@@ -36,14 +36,16 @@
       <!-- iconos -->
       <v-toolbar-items>
         <v-btn flat v-for="item in itemsOfNav" :key="item.title" :to="item.link">
-          <v-icon left>{{item.icon}}</v-icon>
+          <v-icon center>{{item.icon}}</v-icon>
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <!-- Contenido de la app -->
     <main>
       <v-container class="mt-5">
-        <router-view/>
+        <transition name="fade">
+          <router-view/>
+        </transition>
       </v-container>
     </main>
   </v-app>
@@ -80,4 +82,21 @@ export default {
   }
 };
 </script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: all;
+  transition-duration: 0.25s;
+}
+.fade-enter-active {
+  transition-delay: 0.25s;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+  transform: translate(-25px);
+}
+</style>
+
 
