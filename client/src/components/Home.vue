@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <v-btn color="accent">Click here</v-btn>
-  </div>
+  <v-container>
+
+  </v-container>
 </template>
 
 <script>
