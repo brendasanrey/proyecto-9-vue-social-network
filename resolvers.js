@@ -12,6 +12,20 @@ module.exports = {
     }
   },
   Mutation: {
+    addPost: async (
+      _,
+      { title, imageUrl, categories, description, creatorId },
+      { Post }
+    ) => {
+      const newPost = await new Post({
+        title,
+        imageUrl,
+        categories,
+        description,
+        createdBy: creatorId
+      }).save();
+      return newPost;
+    },
     signupUser: async (_, { username, email, password }, { User }) => {
       // Verifica si ya existe un usuario con ese nombre
       const user = await User.findOne({
@@ -27,20 +41,6 @@ module.exports = {
         password
       }).save();
       return newUser;
-    },
-    addPost: async (
-      _,
-      { title, imageUrl, categories, description, creatorId },
-      { Post }
-    ) => {
-      const newPost = await new Post({
-        title,
-        imageUrl,
-        categories,
-        description,
-        createdBy: creatorId
-      }).save();
-      return newPost;
     }
   }
 };

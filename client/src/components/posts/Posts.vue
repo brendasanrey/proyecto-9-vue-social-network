@@ -1,12 +1,11 @@
 <template>
-    <v-container>
-        <h1>Lista de publicaciones</h1>
-    </v-container>
+  <v-container>
+    <h1>Posts</h1>
+  </v-container>
 </template>
 
 <script>
 export default {
-  name: "Post"
+  name: "Posts"
 };
 </script>
-

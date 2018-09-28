@@ -98,5 +98,3 @@ export default {
   transform: translate(-25px);
 }
 </style>
-
-
