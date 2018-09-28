@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <h1>Profile</h1>
+  <v-container fluid>
+    <h1>Perfil</h1>
   </v-container>
 </template>
 

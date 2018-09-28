@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <h1>Signin</h1>
+  <v-container fluid>
+    <h1>Iniciar sesión</h1>
   </v-container>
 </template>
 

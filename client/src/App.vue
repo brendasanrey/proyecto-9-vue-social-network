@@ -30,20 +30,20 @@
         <router-link to="/" tag="span" style="cursor: pointer">Red social</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- busqueda -->
-      <v-text-field prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details class="hidden-xs-only"></v-text-field>
-      <v-spacer></v-spacer>
       <!-- iconos -->
-      <v-toolbar-items>
+      <v-toolbar-items class="mr-4">
         <v-btn flat v-for="item in itemsOfNav" :key="item.title" :to="item.link">
           <v-icon center>{{item.icon}}</v-icon>
         </v-btn>
       </v-toolbar-items>
+      <!-- busqueda -->
+      <v-text-field prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details class="hidden-xs-only"></v-text-field>
+
     </v-toolbar>
     <!-- Contenido de la app -->
     <main>
-      <v-container class=" mt-5 ">
-        <transition name="fade ">
+      <v-container class="fluid mt-5">
+        <transition name="fade">
           <router-view/>
         </transition>
       </v-container>
@@ -89,12 +89,14 @@ export default {
   transition-property: all;
   transition-duration: 0.25s;
 }
+
 .fade-enter-active {
   transition-delay: 0.25s;
 }
+
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
-  transform: translate(-25px);
+  transform: translate(-20px);
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <h1>Signup</h1>
+  <v-container fluid>
+    <h1>Registro</h1>
   </v-container>
 </template>
 

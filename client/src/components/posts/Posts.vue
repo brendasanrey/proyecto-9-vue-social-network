@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <h1>Posts</h1>
+  <v-container fluid>
+    <h1>Publicaciones</h1>
   </v-container>
 </template>
 
