@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <h1>Agregar nueva publicación</h1>
   </v-container>
 </template>

@@ -19,13 +19,20 @@
           </v-list-tile-action>
           <v-list-tile-content>{{item.title}}</v-list-tile-content>
         </v-list-tile>
+        <!-- boton salir -->
+        <v-list-tile v-if="user">
+          <v-list-tile-action>
+            <v-icon center>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Salir</v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
 
     <!-- Barra de navegación -->
     <v-toolbar fixed color="primary" dark>
       <!-- titulo -->
-      <v-toolbar-side-icon @click="toggleSideNav"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click="toggleSideNav" class="hidden-md-only hidden-lg-only"></v-toolbar-side-icon>
       <v-toolbar-title class="hidden-sm-only hidden-xs-only">
         <router-link to="/" tag="span" style="cursor: pointer">Red social</router-link>
       </v-toolbar-title>
@@ -35,9 +42,22 @@
         <v-btn flat v-for="item in itemsOfNav" :key="item.title" :to="item.link">
           <v-icon center>{{item.icon}}</v-icon>
         </v-btn>
+        <!-- boton perfil -->
+        <v-btn flat to="/profile" v-if="user">
+          <v-icon center>account_box</v-icon>
+          <v-badge right color="blue darken-2">
+            <!-- <span slot="badge">1</span> -->
+          </v-badge>
+        </v-btn>
       </v-toolbar-items>
       <!-- busqueda -->
       <v-text-field prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details></v-text-field>
+      <!-- boton salir -->
+      <v-toolbar-items class="mr-md-4 mr-0 hidden-xs-only">
+        <v-btn flat v-if="user">
+          <v-icon center>exit_to_app</v-icon>
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <!-- Contenido de la app -->
     <main>
@@ -51,6 +71,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "App",
   data() {
@@ -59,19 +81,44 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["user"]),
     itemsOfNav() {
-      return [
+      let iconOfNav = [
         { icon: "photo_library", title: "Publicaciones", link: "/posts" },
         { icon: "input", title: "Ingresar", link: "/signin" },
         { icon: "person_add", title: "Registrarse", link: "/signup" }
       ];
+      // Si existe un usuario activo, cambia los iconos de la barra
+      if (this.user) {
+        iconOfNav = [
+          { icon: "photo_library", title: "Publicaciones", link: "/posts" },
+          {
+            icon: "add_photo_alternate",
+            title: "Nueva publicación",
+            link: "/posts/add"
+          }
+        ];
+      }
+      return iconOfNav;
     },
     itemsOfSideNav() {
-      return [
+      let iconOfNav = [
         { icon: "photo_library", title: "Publicaciones", link: "/posts" },
         { icon: "input", title: "Ingresar", link: "/signin" },
         { icon: "person_add", title: "Registrarse", link: "/signup" }
       ];
+      if (this.user) {
+        iconOfNav = iconOfNav = [
+          { icon: "photo_library", title: "Publicaciones", link: "/posts" },
+          {
+            icon: "add_photo_alternate",
+            title: "Nueva publicación",
+            link: "/posts/add"
+          },
+          { icon: "account_circle", title: "Perfil", link: "/profile" }
+        ];
+      }
+      return iconOfNav;
     }
   },
   methods: {

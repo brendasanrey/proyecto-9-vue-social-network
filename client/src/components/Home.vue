@@ -2,15 +2,15 @@
   <v-container fluid grid-list-md>
     <h1>Inicio</h1>
     <v-layout row>
-      <v-dialog persistent fullscreen>
+      <v-dialog persistent fullscreen v-model="loading">
         <v-container fill-height>
           <v-layout row justify-center align-center>
-            <v-progress-circular indeterminate :size="50" :width="6" color="secondary"></v-progress-circular>
+            <v-progress-circular indeterminate :size="50" :width="6" color="accent"></v-progress-circular>
           </v-layout>
         </v-container>
       </v-dialog>
     </v-layout>
-    <v-layout row wrap v-if="posts.length > 0">
+    <v-layout row wrap v-if="!loading && posts.length > 0">
       <v-flex d-flex xs12 sm6 md4 v-for="post in posts" :key="post._id">
         <v-card>
           <v-img :src="post.imageUrl"></v-img>

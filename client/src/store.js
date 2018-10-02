@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import router from "./router";
 
 import { defaultClient as apolloClient } from "./main";
 import { GET_POSTS, SIGNIN_USER, GET_CURRENT_USER } from "./queries";
@@ -7,12 +8,17 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    posts: []
+    posts: [],
+    user: null,
+    loading: false
   },
   mutations: {
     setPosts: (state, payload) => {
       // actualiza el valor de posts
       state.posts = payload;
+    },
+    setUser: (state, payload) => {
+      state.user = payload;
     },
     setLoading: (state, payload) => {
       state.loading = payload;
@@ -27,7 +33,8 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           commit("setLoading", false);
-          console.log(data.getCurrentUser);
+          // Agregar la data(estado) a 'user'
+          commit("setUser", data.getCurrentUser);
         })
         .catch(error => {
           commit("setLoading", false);
@@ -60,7 +67,9 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           localStorage.setItem("token", data.signinUser.token);
-          // console.log(data.signinUser);
+          // Asegurar que el metodo created en main.js se ejecute
+          // router.go -> recarga la pagina
+          router.go();
         })
         .catch(error => {
           console.log(error);
@@ -69,6 +78,7 @@ export default new Vuex.Store({
   },
   getters: {
     posts: state => state.posts,
-    loading: state => state.loading
+    loading: state => state.loading,
+    user: state => state.user
   }
 });
