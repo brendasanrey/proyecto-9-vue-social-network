@@ -22,6 +22,9 @@ export default new Vuex.Store({
     },
     setLoading: (state, payload) => {
       state.loading = payload;
+    },
+    clearUser: state => {
+      state.user = null;
     }
   },
   actions: {
@@ -74,6 +77,16 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error);
         });
+    },
+    signoutUser: async ({ commit }) => {
+      // limpiar estado de 'user'
+      commit("clearUser");
+      // Eliminar toke de localStorage
+      localStorage.setItem("token", "");
+      // Terminar la sesión
+      await apolloClient.resetStore();
+      // Redireccionar al home page
+      router.push("/");
     }
   },
   getters: {

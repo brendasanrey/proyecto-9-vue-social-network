@@ -9,13 +9,13 @@
 
               <v-layout row mt-3>
                 <v-flex xs12>
-                  <v-text-field prepend-icon="person_pin" label="usuario" type="text" v-model="username"></v-text-field>
+                  <v-text-field prepend-icon="person_pin" label="Usuario" type="text" v-model="username"></v-text-field>
                 </v-flex>
               </v-layout>
 
               <v-layout row mt-3>
                 <v-flex xs12>
-                  <v-text-field prepend-icon="vpn_key" label="contraseña" type="password" v-model="password"></v-text-field>
+                  <v-text-field prepend-icon="vpn_key" label="Contraseña" type="password" v-model="password"></v-text-field>
                 </v-flex>
               </v-layout>
 

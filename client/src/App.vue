@@ -20,7 +20,7 @@
           <v-list-tile-content>{{item.title}}</v-list-tile-content>
         </v-list-tile>
         <!-- boton salir -->
-        <v-list-tile v-if="user">
+        <v-list-tile v-if="user" @click="handleSignOutUser">
           <v-list-tile-action>
             <v-icon center>exit_to_app</v-icon>
           </v-list-tile-action>
@@ -54,7 +54,7 @@
       <v-text-field prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details></v-text-field>
       <!-- boton salir -->
       <v-toolbar-items class="mr-md-4 mr-0 hidden-xs-only">
-        <v-btn flat v-if="user">
+        <v-btn flat v-if="user" @click="handleSignOutUser">
           <v-icon center>exit_to_app</v-icon>
         </v-btn>
       </v-toolbar-items>
@@ -124,6 +124,9 @@ export default {
   methods: {
     toggleSideNav() {
       this.sideNav = !this.sideNav;
+    },
+    handleSignOutUser() {
+      this.$store.dispatch("signoutUser");
     }
   }
 };
