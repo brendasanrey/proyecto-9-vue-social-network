@@ -1,3 +1,6 @@
+// bcrypt funcion de hashing para contraseñas
+const bcrypt = require("bcrypt");
+
 module.exports = {
   Query: {
     // primer argumento 'root value'
@@ -32,7 +35,7 @@ module.exports = {
         username
       });
       if (user) {
-        throw new Error("User already exists");
+        throw new Error("El usuario proporcionado ya existe");
       }
       // Crea un nuevo usuario y le pasa los valores de los argumentos recibidos
       const newUser = await new User({
@@ -41,6 +44,18 @@ module.exports = {
         password
       }).save();
       return newUser;
+    },
+    signinUser: async (_, { username, password }, { User }) => {
+      const user = await User.findOne({ username });
+      if (!user) {
+        throw new Error("Usuario no encontrado");
+      }
+      // Comparar la contraseña ingresada con la almacenada en la base
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        throw new Error("Contraseña incorrecta");
+      }
+      return user;
     }
   }
 };
