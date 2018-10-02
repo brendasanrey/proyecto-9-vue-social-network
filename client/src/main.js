@@ -13,6 +13,7 @@ Vue.use(VueApollo);
 // Configuracion para el cliente Apollo,se exporta para usarlo en store.js
 export const defaultClient = new ApolloClient({
   //Url donde esta corriendo el servidor, para conectarlo con el cliente
+  //uri: "https://fullstack-vue-graphql-starter-naitllklzu.now.sh/graphql"
   uri: "http://localhost:4000/graphql"
 });
 

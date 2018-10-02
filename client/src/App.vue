@@ -31,14 +31,13 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- iconos -->
-      <v-toolbar-items class="mr-4">
+      <v-toolbar-items class="mr-md-4 mr-0 hidden-xs-only">
         <v-btn flat v-for="item in itemsOfNav" :key="item.title" :to="item.link">
           <v-icon center>{{item.icon}}</v-icon>
         </v-btn>
       </v-toolbar-items>
       <!-- busqueda -->
-      <v-text-field prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details class="hidden-xs-only"></v-text-field>
-
+      <v-text-field prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details></v-text-field>
     </v-toolbar>
     <!-- Contenido de la app -->
     <main>
