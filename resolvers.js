@@ -1,5 +1,12 @@
 // bcrypt funcion de hashing para contraseñas
 const bcrypt = require("bcrypt");
+// Paquete para crear tokens de acceso
+const jwt = require("jsonwebtoken");
+
+const createToken = (user, secret, expiresIn) => {
+  const { username, email } = user;
+  return jwt.sign({ username, email }, secret, { expiresIn });
+};
 
 module.exports = {
   Query: {
@@ -43,7 +50,7 @@ module.exports = {
         email,
         password
       }).save();
-      return newUser;
+      return { token: createToken(newUser, process.env.SECRET, "1hr") };
     },
     signinUser: async (_, { username, password }, { User }) => {
       const user = await User.findOne({ username });
@@ -55,7 +62,7 @@ module.exports = {
       if (!isValidPassword) {
         throw new Error("Contraseña incorrecta");
       }
-      return user;
+      return { token: createToken(user, process.env.SECRET, "1hr") };
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid grid-list-md>
-    <h1>Publicaciones</h1>
+    <h1>Inicio</h1>
     <v-layout row>
       <v-dialog persistent fullscreen>
         <v-container fill-height>
