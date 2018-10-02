@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import { defaultClient as apolloClient } from "./main";
-import { GET_POSTS, SIGNIN_USER } from "./queries";
+import { GET_POSTS, SIGNIN_USER, GET_CURRENT_USER } from "./queries";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -19,6 +19,21 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    getCurrentUser: ({ commit }) => {
+      commit("setLoading", true);
+      apolloClient
+        .query({
+          query: GET_CURRENT_USER
+        })
+        .then(({ data }) => {
+          commit("setLoading", false);
+          console.log(data.getCurrentUser);
+        })
+        .catch(error => {
+          commit("setLoading", false);
+          console.log(error);
+        });
+    },
     getPosts: ({ commit }) => {
       commit("setLoading", true);
       // Usando el cliente Apollo para ejecutar el query getPost
@@ -45,7 +60,7 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           localStorage.setItem("token", data.signinUser.token);
-          console.log(data.signinUser);
+          // console.log(data.signinUser);
         })
         .catch(error => {
           console.log(error);

@@ -1,8 +1,11 @@
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer, AuthenticationError } = require("apollo-server");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+
 require("dotenv").config({ path: "variables.env" });
+
 const resolvers = require("./resolvers");
 const User = require("./models/User");
 const Post = require("./models/Post");
@@ -17,16 +20,34 @@ mongoose
     process.env.MONGO_URI,
     { useNewUrlParser: true }
   )
-  .then(() => console.log("bd connected"))
-  .catch(err => console.log(err));
+  .then(() => {
+    console.log("BD conectada");
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
+// Verificar el token generado con jwt obtenido del cliente
+const getUser = async token => {
+  if (token) {
+    try {
+      return await jwt.verify(token, process.env.SECRET);
+    } catch (error) {
+      throw new AuthenticationError(
+        "Tu sesión ha expirado. Ingresa nuevamente"
+      );
+    }
+  }
+};
 
 // Crear servidor Apollo/GraphQl usando typedefs, resolvers y context
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: {
-    User,
-    Post
+  context: async ({ req }) => {
+    // Obtener el token
+    const token = req.headers["authorization"];
+    return { User, Post, currentUser: await getUser(token) };
   }
 });
 

@@ -19,6 +19,17 @@ module.exports = {
           model: "User"
         });
       return posts;
+    },
+    getCurrentUser: async (_, args, { User, currentUser }) => {
+      // Verifica si existe un usuario activo
+      if (!currentUser) {
+        return null;
+      }
+      // Buscar el usuario y traer las propiedades que le pertenecen (favoritos y publicaciones)
+      const user = await User.findOne({
+        username: currentUser.username
+      }).populate({ path: "favorites", model: "Post" });
+      return user;
     }
   },
   Mutation: {
