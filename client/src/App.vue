@@ -65,6 +65,14 @@
         <transition name="fade">
           <router-view/>
         </transition>
+        <!-- snackbar (notificaciones emergentes) -->
+        <v-snackbar v-model="authSnackbar" color="success" bottom left :timeout="5000">
+          <v-icon class="mt5">check_circle</v-icon>
+          <h3>Ha ingresado exitosamente</h3>
+          <v-btn dark flat @click="authSnackbar = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-snackbar>
       </v-container>
     </main>
   </v-app>
@@ -77,8 +85,17 @@ export default {
   name: "App",
   data() {
     return {
-      sideNav: false
+      sideNav: false,
+      authSnackbar: false
     };
+  },
+  watch: {
+    user(newValue, oldValue) {
+      // valida que no existiera un valor anterior para user, para mostrar el snackbar solo una vez (al iniciar sesión)
+      if (oldValue === null) {
+        this.authSnackbar = true;
+      }
+    }
   },
   computed: {
     ...mapGetters(["user"]),

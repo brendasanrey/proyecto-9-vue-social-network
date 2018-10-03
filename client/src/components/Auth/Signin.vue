@@ -12,25 +12,25 @@
       <v-flex xs12 sm8 offset-sm2>
         <v-card color="accent" dark>
           <v-container>
-            <v-form @submit.prevent="handleSigninUser">
+            <v-form v-model="isValidForm" lazy-validation ref="form" @submit.prevent="handleSigninUser">
 
               <v-layout row mt-3>
                 <v-flex xs12>
-                  <v-text-field prepend-icon="person_pin" label="Usuario" type="text" v-model="username"></v-text-field>
+                  <v-text-field :rules="usernameRules" prepend-icon="person_pin" label="Usuario" type="text" v-model="username"></v-text-field>
                 </v-flex>
               </v-layout>
 
               <v-layout row mt-3>
                 <v-flex xs12>
-                  <v-text-field prepend-icon="vpn_key" label="Contraseña" type="password" v-model="password"></v-text-field>
+                  <v-text-field :rules="passwordRules" prepend-icon="vpn_key" label="Contraseña" type="password" v-model="password"></v-text-field>
                 </v-flex>
               </v-layout>
 
               <v-layout row mt-3>
                 <v-flex xs12>
-                  <v-btn :loading="loading" color="primary" type="submit">
+                  <v-btn :loading="loading" :disabled="!isValidForm" color="primary" type="submit">
                     <span slot="loader" class="custom-loader">
-                      <v-icon light>cached</v-icon>
+                      <v-icon light>loop</v-icon>
                     </span>
                     Ingresar
                   </v-btn>
@@ -55,8 +55,22 @@ export default {
   name: "Signin",
   data() {
     return {
+      isValidForm: true,
       username: "",
-      password: ""
+      password: "",
+      // Validación de campos de formulario
+      usernameRules: [
+        // comprobar que se ingrese un string en el input
+        username => !!username || "Completa este campo",
+        // Nombre de usuario menor a 15 caracteres
+        username =>
+          username.length < 15 || "El usuario debe tener menos de 15 caracteres"
+      ],
+      passwordRules: [
+        password => !!password || "Completa este campo",
+        password =>
+          password.length > 5 || "La contraseña debe tener más de 5 caracteres"
+      ]
     };
   },
   computed: {
@@ -72,10 +86,13 @@ export default {
   },
   methods: {
     handleSigninUser() {
-      this.$store.dispatch("signinUser", {
-        username: this.username,
-        password: this.password
-      });
+      // Si no se validan los campos del formulario, no se realiza la petición de la mutación signinUser
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch("signinUser", {
+          username: this.username,
+          password: this.password
+        });
+      }
     }
   }
 };
