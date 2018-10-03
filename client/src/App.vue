@@ -65,12 +65,21 @@
         <transition name="fade">
           <router-view/>
         </transition>
-        <!-- snackbar (notificaciones emergentes) -->
+        <!-- snackbar de inicio de sesión (notificaciones emergentes) -->
         <v-snackbar v-model="authSnackbar" color="success" bottom left :timeout="5000">
           <v-icon class="mt5">check_circle</v-icon>
           <h3>Ha ingresado exitosamente</h3>
           <v-btn dark flat @click="authSnackbar = false">
             <v-icon>close</v-icon>
+          </v-btn>
+        </v-snackbar>
+
+        <!-- snackbar de error en autentificación-->
+        <v-snackbar v-if="authError" v-model="authErrorSnackbar" color="error" bottom left :timeout="5000">
+          <v-icon class="mt5">cancel</v-icon>
+          <h3>Tu sesión ha expirado, inicia sesión para continuar</h3>
+          <v-btn dark flat to="/signin">
+            Ingresar
           </v-btn>
         </v-snackbar>
       </v-container>
@@ -86,19 +95,26 @@ export default {
   data() {
     return {
       sideNav: false,
-      authSnackbar: false
+      authSnackbar: false,
+      authErrorSnackbar: false
     };
   },
   watch: {
     user(newValue, oldValue) {
-      // valida que no existiera un valor anterior para user, para mostrar el snackbar solo una vez (al iniciar sesión)
+      // valida que no exista un valor anterior para 'user', para mostrar el snackbar solo una vez (al iniciar sesión)
       if (oldValue === null) {
         this.authSnackbar = true;
+      }
+    },
+    authError(value) {
+      // valida que el value sea diferente de null, para mostrar el snackbar
+      if (value !== null) {
+        this.authErrorSnackbar = true;
       }
     }
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["authError", "user"]),
     itemsOfNav() {
       let iconOfNav = [
         { icon: "photo_library", title: "Publicaciones", link: "/posts" },

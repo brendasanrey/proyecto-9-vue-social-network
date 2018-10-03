@@ -44,6 +44,13 @@ export const defaultClient = new ApolloClient({
     if (graphQLErrors) {
       for (let error of graphQLErrors) {
         console.log(error);
+        // Cuando existe una modificación en el token
+        if (error.name === "AuthenticationError") {
+          // establecer error para mostrar un snackbar
+          store.commit("setAuthError", error);
+          // cerrar sesión
+          store.dispatch("singoutUser");
+        }
       }
     }
   }

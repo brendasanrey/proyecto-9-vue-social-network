@@ -28,7 +28,7 @@
 
               <v-layout row mt-3>
                 <v-flex xs12>
-                  <v-btn :loading="loading" :disabled="!isValidForm" color="primary" type="submit">
+                  <v-btn :loading="loading" :disabled="!isValidForm || loading" color="primary" type="submit">
                     <span slot="loader" class="custom-loader">
                       <v-icon light>loop</v-icon>
                     </span>
