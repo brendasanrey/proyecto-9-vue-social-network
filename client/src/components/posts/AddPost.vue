@@ -74,10 +74,9 @@ export default {
       categories: [],
       description: "",
       titleRules: [
-        // comprobar que se ingrese un string en el input
         title => !!title || "Completa este campo",
         title =>
-          title.length < 20 || "El título debe tener menos de 20 caracteres"
+          title.length < 30 || "El título debe tener menos de 30 caracteres"
       ],
       descriptionRules: [
         description => !!description || "Completa este campo",
@@ -93,7 +92,20 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["loading", "error", "user"])
+    ...mapGetters(["loading", "user"])
+  },
+  methods: {
+    handleaddPost() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch("addPost", {
+          title: this.title,
+          imageUrl: this.urlImage,
+          categories: this.categories,
+          description: this.description,
+          creatorId: this.user._id
+        });
+      }
+    }
   }
 };
 </script>
