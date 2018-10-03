@@ -1,5 +1,12 @@
 <template>
   <v-container fluid text-md-center>
+    <!-- alerta de error -->
+    <v-layout row wrap v-if="error">
+      <v-flex xs12 sm8 offset-sm2>
+        <form-alert :message="error.message"></form-alert>
+      </v-flex>
+    </v-layout>
+
     <!-- formulario -->
     <v-layout row wrpa mt-3>
       <v-flex xs12 sm8 offset-sm2>
@@ -21,7 +28,12 @@
 
               <v-layout row mt-3>
                 <v-flex xs12>
-                  <v-btn color="primary" type="submit">Ingresar</v-btn>
+                  <v-btn :loading="loading" color="primary" type="submit">
+                    <span slot="loader" class="custom-loader">
+                      <v-icon light>cached</v-icon>
+                    </span>
+                    Ingresar
+                  </v-btn>
                   <p class="mt-2">¿No tienes cuenta?
                     <router-link to="/signup">Regístrate</router-link>
                   </p>
@@ -48,7 +60,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["loading", "user", "error"])
   },
   watch: {
     user(value) {
@@ -68,3 +80,42 @@ export default {
   }
 };
 </script>
+
+<style>
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

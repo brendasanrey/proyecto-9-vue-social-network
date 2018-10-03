@@ -10,7 +10,8 @@ export default new Vuex.Store({
   state: {
     posts: [],
     user: null,
-    loading: false
+    loading: false,
+    error: null
   },
   mutations: {
     setPosts: (state, payload) => {
@@ -25,6 +26,12 @@ export default new Vuex.Store({
     },
     clearUser: state => {
       state.user = null;
+    },
+    setError: (state, payload) => {
+      state.error = payload;
+    },
+    clearError: state => {
+      state.error = null;
     }
   },
   actions: {
@@ -63,6 +70,8 @@ export default new Vuex.Store({
         });
     },
     signinUser: ({ commit }, payload) => {
+      commit("clearError");
+      commit("setLoading", true);
       localStorage.setItem("token", "");
       apolloClient
         .mutate({
@@ -70,12 +79,15 @@ export default new Vuex.Store({
           variables: payload
         })
         .then(({ data }) => {
+          commit("setLoading", false);
           localStorage.setItem("token", data.signinUser.token);
           // Asegurar que el metodo created en main.js se ejecute
           // router.go -> recarga la pagina
           router.go();
         })
         .catch(error => {
+          commit("setLoading", false);
+          commit("setError", error);
           console.log(error);
         });
     },
@@ -93,6 +105,7 @@ export default new Vuex.Store({
   getters: {
     posts: state => state.posts,
     loading: state => state.loading,
-    user: state => state.user
+    user: state => state.user,
+    error: state => state.error
   }
 });
