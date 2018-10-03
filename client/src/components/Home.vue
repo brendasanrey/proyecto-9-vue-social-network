@@ -13,10 +13,10 @@
     <v-layout row wrap v-if="!loading && posts.length > 0">
       <v-flex d-flex xs12 sm6 md4 v-for="post in posts" :key="post._id">
         <v-card>
-          <v-img :src="post.imageUrl"></v-img>
+          <img :src="post.imageUrl" height="200px" width="100%">
           <v-card-title>
             <div>
-              <span>{{post.title}}</span><br>
+              <strong>{{post.title}}</strong><br>
               <span>{{post.description}}</span>
             </div>
           </v-card-title>
