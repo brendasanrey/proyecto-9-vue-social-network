@@ -4,6 +4,7 @@ import Home from "./components/Home.vue";
 // Componentes para publicaciones
 import AddPost from "./components/Posts/AddPost.vue";
 import Posts from "./components/Posts/Posts.vue";
+import Post from "./components/Posts/Post.vue";
 
 // Componentes para sesiones de usuario
 import Profile from "./components/Auth/Profile.vue";
@@ -30,9 +31,15 @@ export default new Router({
       component: Posts
     },
     {
+      path: "/posts/:postId",
+      name: "Post",
+      component: Post,
+      props: true
+    },
+    {
       path: "/posts/add",
       name: "AddPost",
-      component: AddPost,
+      component: AddPost
     },
     {
       path: "/profile",

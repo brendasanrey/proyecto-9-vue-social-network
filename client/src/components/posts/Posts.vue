@@ -2,7 +2,7 @@
   <v-container fluid grid-list-xl>
     <v-layout row wrap v-if="infiniteScrollPosts">
       <v-flex xs12 sm4 v-for="post in infiniteScrollPosts.posts" :key="post._id">
-        <v-card hover>
+        <v-card hover @click.native="goToPost(post._id)">
           <v-card-media :src="post.imageUrl" height="30vh" lazy></v-card-media>
           <v-card-actions>
             <v-card-title primary>
@@ -32,7 +32,7 @@
     <v-layout v-if="showMoreEnabled" column>
       <v-flex xs12>
         <v-layout justify-center row>
-          <v-btn color="info" @click="showMorePosts">Fetch More</v-btn>
+          <v-btn color="primary" @click="showMorePosts">Cargar más</v-btn>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -64,6 +64,9 @@ export default {
     }
   },
   methods: {
+    goToPost(postId) {
+      this.$router.push(`/posts/${postId}`);
+    },
     showMorePosts() {
       this.pageNum += 1;
       // Se hace otro 'fetch' para traer más posts

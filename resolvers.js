@@ -20,6 +20,15 @@ module.exports = {
         });
       return posts;
     },
+    getPost: async (_, { postId }, { Post }) => {
+      const post = await Post.findOne({
+        _id: postId
+      }).populate({
+        path: "messages.messageUser",
+        model: "User"
+      });
+      return post;
+    },
     getCurrentUser: async (_, args, { User, currentUser }) => {
       // Verifica si existe un usuario activo
       if (!currentUser) {

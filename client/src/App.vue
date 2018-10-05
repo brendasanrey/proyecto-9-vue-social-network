@@ -66,13 +66,13 @@
           <router-view/>
         </transition>
         <!-- snackbar de inicio de sesión (notificaciones emergentes) -->
-        <v-snackbar v-model="authSnackbar" color="success" bottom left :timeout="5000">
+        <!-- <v-snackbar v-model="authSnackbar" color="success" bottom left :timeout="5000">
           <v-icon class="mt5">check_circle</v-icon>
           <h3>Ha ingresado exitosamente</h3>
           <v-btn dark flat @click="authSnackbar = false">
             <v-icon>close</v-icon>
           </v-btn>
-        </v-snackbar>
+        </v-snackbar> -->
 
         <!-- snackbar de error en autentificación-->
         <v-snackbar v-if="authError" v-model="authErrorSnackbar" color="error" bottom left :timeout="5000">
