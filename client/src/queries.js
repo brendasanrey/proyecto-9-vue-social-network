@@ -35,7 +35,31 @@ export const ADD_POST = gql`
       imageUrl
       categories
       description
-      createdDate
+    }
+  }
+`;
+
+export const INFINITE_SCROLL_POSTS = gql`
+  query($pageNum: Int!, $pageSize: Int!) {
+    infiniteScrollPosts(pageNum: $pageNum, pageSize: $pageSize) {
+      hasMore
+      posts {
+        _id
+        title
+        imageUrl
+        categories
+        description
+        likes
+        createdDate
+        messages {
+          _id
+        }
+        createdBy {
+          _id
+          username
+          avatar
+        }
+      }
     }
   }
 `;

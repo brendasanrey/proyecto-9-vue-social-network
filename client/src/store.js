@@ -83,7 +83,20 @@ export default new Vuex.Store({
       apolloClient
         .mutate({
           mutation: ADD_POST,
-          variables: payload
+          variables: payload,
+          update: (cache, { data: { addPost } }) => {
+            // Leer el query de donde se obtienen los datos a actualizar
+            const data = cache.readQuery({ query: GET_POST });
+            // Actualizar la data
+            data.getPosts.unshift(addPost);
+            cache.readQuery({ query: GET_POSTS, data });
+          },
+          // Asegura que la data sea agregada inmediatamente como se especifica en la función de 'update'
+          optimisticResponse: {
+            __typename: "Mutation",
+            _id: -1,
+            ...payload
+          }
         })
         .then(({ data }) => {
           console.log(data.addPost);

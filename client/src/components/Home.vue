@@ -12,7 +12,7 @@
     </v-layout>
     <v-layout row wrap v-if="!loading && posts.length > 0">
       <v-flex d-flex xs12 sm6 md4 v-for="post in posts" :key="post._id">
-        <v-card>
+        <v-card class="mt-3" hover>
           <img :src="post.imageUrl" height="200px" width="100%">
           <v-card-title>
             <div>
@@ -20,10 +20,6 @@
               <span>{{post.description}}</span>
             </div>
           </v-card-title>
-          <v-card-actions>
-            <v-btn flat color="accent">Share</v-btn>
-            <v-btn flat color="secondary">Explore</v-btn>
-          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
