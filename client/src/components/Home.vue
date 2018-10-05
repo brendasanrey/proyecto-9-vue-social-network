@@ -12,8 +12,8 @@
     </v-layout>
     <v-layout row wrap v-if="!loading && posts.length > 0">
       <v-flex d-flex xs12 sm6 md4 v-for="post in posts" :key="post._id">
-        <v-card class="mt-3" hover @click.native="goToPost(post._id)">
-          <img :src="post.imageUrl" height="200px" width="100%">
+        <v-card class="mt-3" hover>
+          <v-card-media :src="post.imageUrl" height="200px" width="100%" @click.native="goToPost(post._id)"></v-card-media>
           <v-card-title>
             <div>
               <strong>{{post.title}}</strong><br>
@@ -43,12 +43,12 @@ export default {
     }
   },
   methods: {
+    goToPost(postId) {
+      this.$router.push(`/posts/${postId}`);
+    },
     handleHomePosts() {
       // traer el metodo desde el archivo store
       this.$store.dispatch("getPosts");
-    },
-    goToPost(postId) {
-      this.$router.push(`/posts/${postId}`);
     }
   }
 };

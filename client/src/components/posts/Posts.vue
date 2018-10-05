@@ -2,13 +2,13 @@
   <v-container fluid grid-list-xl>
     <v-layout row wrap v-if="infiniteScrollPosts">
       <v-flex xs12 sm4 v-for="post in infiniteScrollPosts.posts" :key="post._id">
-        <v-card hover @click.native="goToPost(post._id)">
-          <v-card-media :src="post.imageUrl" height="30vh" lazy></v-card-media>
+        <v-card hover>
+          <v-card-media :src="post.imageUrl" height="30vh" lazy @click.native="goToPost(post._id)"></v-card-media>
           <v-card-actions>
             <v-card-title primary>
               <div>
                 <div class="headline">{{post.title}}</div>
-                <span class="grey--text">{{post.likes}} likes - {{post.messages.length}} comments</span>
+                <span class="grey--text">{{post.likes}} likes - {{post.messages.length}} comentarios</span>
               </div>
             </v-card-title>
             <v-spacer></v-spacer>
@@ -22,13 +22,10 @@
             <v-btn icon ripple>
               <v-icon color="grey lighten-1">info</v-icon>
             </v-btn>
-
           </v-card-actions>
-
         </v-card>
       </v-flex>
     </v-layout>
-
     <v-layout v-if="showMoreEnabled" column>
       <v-flex xs12>
         <v-layout justify-center row>
@@ -36,16 +33,12 @@
         </v-layout>
       </v-flex>
     </v-layout>
-
   </v-container>
 </template>
 
-
 <script>
 import { INFINITE_SCROLL_POSTS } from "../../queries";
-
 const pageSize = 3;
-
 export default {
   name: "Posts",
   data() {
@@ -79,11 +72,9 @@ export default {
         updateQuery: (prevResult, { fetchMoreResult }) => {
           console.log("previous result", prevResult.infiniteScrollPosts.posts);
           console.log("fetch more result", fetchMoreResult);
-
           const newPosts = fetchMoreResult.infiniteScrollPosts.posts;
           const hasMore = fetchMoreResult.infiniteScrollPosts.hasMore;
           this.showMoreEnabled = hasMore;
-
           return {
             infiniteScrollPosts: {
               __typename: prevResult.infiniteScrollPosts.__typename,

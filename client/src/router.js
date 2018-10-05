@@ -31,15 +31,15 @@ export default new Router({
       component: Posts
     },
     {
+      path: "/posts/add",
+      name: "AddPost",
+      component: AddPost
+    },
+    {
       path: "/posts/:postId",
       name: "Post",
       component: Post,
       props: true
-    },
-    {
-      path: "/posts/add",
-      name: "AddPost",
-      component: AddPost
     },
     {
       path: "/profile",

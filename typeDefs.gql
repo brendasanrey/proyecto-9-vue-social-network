@@ -1,6 +1,5 @@
 type User {
   _id: ID
-  # signo '!' -> Not null
   username: String! @unique
   email: String!
   password: String!
@@ -38,9 +37,9 @@ type PostsPage {
 }
 
 type Query {
-  getCurrentUser: User
   getPosts: [Post]
   getPost(postId: ID!): Post!
+  getCurrentUser: User
   infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
 }
 
