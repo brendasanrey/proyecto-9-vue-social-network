@@ -82,7 +82,7 @@ export default {
         description => !!description || "Completa este campo",
         description =>
           description.length < 200 ||
-          "El título debe tener menos de 200 caracteres"
+          "La descripción debe tener menos de 200 caracteres"
       ],
       urlImageRules: [urlImage => !!urlImage || "Completa este campo"],
       categoriesRules: [
@@ -104,7 +104,7 @@ export default {
           description: this.description,
           creatorId: this.user._id
         });
-        this.$router.push("/");
+        this.$router.push("/posts");
       }
     }
   }

@@ -9,10 +9,7 @@
           </v-tooltip>
           <v-card-title>
             <h1>{{getPost.title}}</h1>
-            <v-btn large icon v-if="user">
-              <v-icon large color="grey" class="mx-2">stars</v-icon>
-            </v-btn>
-            <v-icon large color="grey">thumb_up</v-icon>
+            <v-icon large color="grey" class="ml-3">thumb_up</v-icon>
             <h2 class="mx-2 font-weight-medium grey--text">{{getPost.likes}}</h2>
             <v-spacer></v-spacer>
             <v-icon @click="goToPreviousPage" color="grey" large>arrow_back</v-icon>
@@ -38,10 +35,10 @@
     <div class="mt-3">
       <v-layout class="mb-3" v-if="user">
         <v-flex xs12 sm8 offset-sm1>
-          <v-form @submit.prevent="handleAddPostMessage">
+          <v-form v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleAddPostMessage">
             <v-layout row>
               <v-flex xs12>
-                <v-text-field v-model="messageBody" clearable :append-outer-icon="messageBody && 'send'" label="Comentar" type="text" @click:append-outer="handleAddPostMessage" prepend-icon="rate_review" required></v-text-field>
+                <v-text-field :rules="messageRules" v-model="messageBody" clearable :append-outer-icon="messageBody && 'send'" label="Comentar" type="text" @click:append-outer="handleAddPostMessage" prepend-icon="rate_review" required></v-text-field>
               </v-flex>
             </v-layout>
           </v-form>
@@ -71,7 +68,8 @@
                 </v-list-tile-content>
 
                 <v-list-tile-action class='hidden-xs-only'>
-                  <v-icon color="grey">textsms</v-icon>
+                  <!-- El color del icono es diferente si es un comentario del usuario activo -->
+                  <v-icon :color="checkIfOwnMessage(message) ? 'accent' : 'grey'">textsms</v-icon>
                 </v-list-tile-action>
 
               </v-list-tile>
@@ -96,7 +94,14 @@ export default {
   data() {
     return {
       dialog: false,
-      messageBody: ""
+      messageBody: "",
+      isFormValid: true,
+      messageRules: [
+        message => !!message || "Campo requerido",
+        message =>
+          message.length < 100 ||
+          "El comentario debe tener menos de 100 caracteres"
+      ]
     };
   },
   apollo: {
@@ -114,32 +119,38 @@ export default {
   },
   methods: {
     handleAddPostMessage() {
-      const variables = {
-        messageBody: this.messageBody,
-        userId: this.user._id,
-        postId: this.postId
-      };
-      this.$apollo
-        .mutate({
-          mutation: ADD_POST_MESSAGE,
-          variables,
-          update: (cache, { data: { addPostMessage } }) => {
-            const data = cache.readQuery({
-              query: GET_POST,
-              variables: { postId: this.postId }
-            });
-            data.getPost.messages.unshift(addPostMessage);
-            cache.writeQuery({
-              query: GET_POST,
-              variables: { postId: this.postId },
-              data
-            });
-          }
-        })
-        .then(({ data }) => {
-          console.log(data.addPostMessage);
-        })
-        .catch(err => console.error(err));
+      if (this.$refs.form.validate()) {
+        const variables = {
+          messageBody: this.messageBody,
+          userId: this.user._id,
+          postId: this.postId
+        };
+        this.$apollo
+          .mutate({
+            mutation: ADD_POST_MESSAGE,
+            variables,
+            update: (cache, { data: { addPostMessage } }) => {
+              const data = cache.readQuery({
+                query: GET_POST,
+                variables: { postId: this.postId }
+              });
+              data.getPost.messages.unshift(addPostMessage);
+              cache.writeQuery({
+                query: GET_POST,
+                variables: { postId: this.postId },
+                data
+              });
+            }
+          })
+          .then(({ data }) => {
+            // limpiar el input del comentario
+            this.$refs.form.reset();
+            console.log(data.addPostMessage);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     },
     goToPreviousPage() {
       this.$router.go(-1);
@@ -148,6 +159,10 @@ export default {
       if (window.innerWidth > 500) {
         this.dialog = !this.dialog;
       }
+    },
+    checkIfOwnMessage(message) {
+      // Comprobar que el id del usuario activo sea igual al del usuario que creo el comentario
+      return this.user && this.user._id === message.messageUser._id;
     }
   }
 };
