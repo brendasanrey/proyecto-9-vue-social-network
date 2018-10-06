@@ -10,10 +10,10 @@
           <v-card-title>
             <h1>{{getPost.title}}</h1>
             <v-btn large icon v-if="user">
-              <v-icon large color="grey">stars</v-icon>
+              <v-icon large color="grey" class="mx-2">stars</v-icon>
             </v-btn>
             <v-icon large color="grey">thumb_up</v-icon>
-            <h2 class="ml-3 font-weight-medium grey--text">{{getPost.likes}}</h2>
+            <h2 class="mx-2 font-weight-medium grey--text">{{getPost.likes}}</h2>
             <v-spacer></v-spacer>
             <v-icon @click="goToPreviousPage" color="grey" large>arrow_back</v-icon>
           </v-card-title>
@@ -41,7 +41,7 @@
           <v-form @submit.prevent="handleAddPostMessage">
             <v-layout row>
               <v-flex xs12>
-                <v-text-field v-model="messageBody" clearable :append-outer-icon="messageBody && 'send'" label="Comentar" type="text" @click:append-outer="handleAddPostMessage" prepend-icon="email" required></v-text-field>
+                <v-text-field v-model="messageBody" clearable :append-outer-icon="messageBody && 'send'" label="Comentar" type="text" @click:append-outer="handleAddPostMessage" prepend-icon="rate_review" required></v-text-field>
               </v-flex>
             </v-layout>
           </v-form>
@@ -71,7 +71,7 @@
                 </v-list-tile-content>
 
                 <v-list-tile-action class='hidden-xs-only'>
-                  <v-icon color="grey">chat_bubble</v-icon>
+                  <v-icon color="grey">textsms</v-icon>
                 </v-list-tile-action>
 
               </v-list-tile>

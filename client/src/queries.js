@@ -60,6 +60,7 @@ export const INFINITE_SCROLL_POSTS = gql`
     }
   }
 `;
+
 // Mutaciones para publicaciones
 
 export const ADD_POST = gql`

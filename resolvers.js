@@ -82,6 +82,23 @@ module.exports = {
       }).save();
       return newPost;
     },
+    addPostMessage: async (_, { messageBody, userId, postId }, { Post }) => {
+      const newMessage = {
+        messageBody,
+        messageUser: userId
+      };
+      const post = await Post.findOneAndUpdate(
+        // Encontrar la publicacion por su id
+        { _id: postId },
+        // Agregar el nuevo comentario al inicio del array
+        { $push: { messages: { $each: [newMessage], $position: 0 } } },
+        { new: true }
+      ).populate({
+        path: "messages.messageUser",
+        model: "User"
+      });
+      return post.messages[0];
+    },
     signupUser: async (_, { username, email, password }, { User }) => {
       // Verifica si ya existe un usuario con ese nombre
       const user = await User.findOne({

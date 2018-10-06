@@ -1,5 +1,5 @@
 {
-  "name": "traveling-net",
+  "name": "social-network",
   "type": "static",
   "static": {
     "public": "dist",
@@ -10,6 +10,6 @@
       }
     ]
   },
-  "alias": "traveling-net",
+  "alias": "social-network",
   "files": ["dist"]
 }
