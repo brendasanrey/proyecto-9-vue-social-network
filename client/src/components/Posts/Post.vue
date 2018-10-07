@@ -9,7 +9,7 @@
           </v-tooltip>
           <v-card-title>
             <h1>{{getPost.title}}</h1>
-            <v-icon large color="grey" class="ml-3" @click="handleLikePost">thumb_up</v-icon>
+            <v-icon large :color="checkIfPostLiked(getPost._id) ? 'secondary' : 'grey'" class="ml-3" @click="handleToggleLike">thumb_up</v-icon>
             <h2 class="mx-2 font-weight-medium grey--text">{{getPost.likes}}</h2>
             <v-spacer></v-spacer>
             <v-icon @click="goToPreviousPage" color="grey" large>arrow_back</v-icon>
@@ -100,6 +100,7 @@ export default {
     return {
       dialog: false,
       messageBody: "",
+      postLiked: false,
       isFormValid: true,
       messageRules: [
         message => !!message || "Campo requerido",
@@ -120,9 +121,29 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user", "userFavorites"])
   },
   methods: {
+    checkIfPostLiked(postId) {
+      // Comprobar si el postId se encuentra en el arreglo de favoritos del usuario
+      if (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === postId)
+      ) {
+        this.postLiked = true;
+        return true;
+      } else {
+        this.postLiked = false;
+        return false;
+      }
+    },
+    handleToggleLike() {
+      if (this.postLiked) {
+        this.handleUnlikePost();
+      } else {
+        this.handleLikePost();
+      }
+    },
     handleLikePost() {
       const variables = {
         postId: this.postId,
@@ -146,11 +167,45 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log(data.likePost);
+          // Agregar favoritos al usuario
+          const updatedUser = {
+            ...this.user,
+            favorites: data.likePost.favorites
+          };
+          this.$store.commit("setUser", updatedUser);
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(err => console.error(err));
+    },
+    handleUnlikePost() {
+      const variables = {
+        postId: this.postId,
+        username: this.user.username
+      };
+      this.$apollo
+        .mutate({
+          mutation: UNLIKE_POST,
+          variables,
+          update: (cache, { data: { unlikePost } }) => {
+            const data = cache.readQuery({
+              query: GET_POST,
+              variables: { postId: this.postId }
+            });
+            data.getPost.likes -= 1;
+            cache.writeQuery({
+              query: GET_POST,
+              variables: { postId: this.postId },
+              data
+            });
+          }
+        })
+        .then(({ data }) => {
+          const updatedUser = {
+            ...this.user,
+            favorites: data.unlikePost.favorites
+          };
+          this.$store.commit("setUser", updatedUser);
+        })
+        .catch(err => console.error(err));
     },
     handleAddPostMessage() {
       if (this.$refs.form.validate()) {
