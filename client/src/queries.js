@@ -73,6 +73,20 @@ export const SEARCH_POSTS = gql`
   }
 `;
 
+export const GET_USER_POSTS = gql`
+  query($userId: ID!) {
+    getUserPosts(userId: $userId) {
+      _id
+      title
+      imageUrl
+      description
+      categories
+      createdDate
+      likes
+    }
+  }
+`;
+
 // Mutaciones para publicaciones
 
 export const ADD_POST = gql`

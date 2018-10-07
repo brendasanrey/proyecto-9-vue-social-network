@@ -80,6 +80,13 @@ module.exports = {
           .limit(5);
         return searchResults;
       }
+    },
+    getUserPosts: async (_, { userId }, { Post }) => {
+      // Encontrar las publicaciones creadas por el usuario activo (por id)
+      const posts = await Post.find({
+        createdBy: userId
+      });
+      return posts;
     }
   },
   Mutation: {

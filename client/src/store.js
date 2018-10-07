@@ -9,7 +9,8 @@ import {
   GET_CURRENT_USER,
   SIGNUP_USER,
   ADD_POST,
-  SEARCH_POSTS
+  SEARCH_POSTS,
+  GET_USER_POSTS
 } from "./queries";
 Vue.use(Vuex);
 
@@ -17,6 +18,7 @@ export default new Vuex.Store({
   state: {
     posts: [],
     searchResults: [],
+    userPosts: [],
     user: null,
     loading: false,
     error: null,
@@ -38,6 +40,9 @@ export default new Vuex.Store({
     setUser: (state, payload) => {
       state.user = payload;
     },
+    setUserPosts: (state, payload) => {
+      state.userPosts = payload;
+    },
     setLoading: (state, payload) => {
       state.loading = payload;
     },
@@ -55,6 +60,19 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    getUserPosts: ({ commit }, payload) => {
+      apolloClient
+        .query({
+          query: GET_USER_POSTS,
+          variables: payload
+        })
+        .then(({ data }) => {
+          commit("setUserPosts", data.getUserPosts);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     getCurrentUser: ({ commit }) => {
       commit("setLoading", true);
       apolloClient
@@ -188,6 +206,7 @@ export default new Vuex.Store({
   getters: {
     posts: state => state.posts,
     searchResults: state => state.searchResults,
+    userPosts: state => state.userPosts,
     loading: state => state.loading,
     user: state => state.user,
     userFavorites: state => state.user && state.user.favorites,
