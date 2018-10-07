@@ -103,7 +103,7 @@ export default new Vuex.Store({
           }
         })
         .then(({ data }) => {
-          console.log(data.addPost);
+          //console.log(data.addPost);
         })
         .catch(error => {
           console.log(error);

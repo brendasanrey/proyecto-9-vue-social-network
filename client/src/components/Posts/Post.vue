@@ -174,7 +174,9 @@ export default {
           };
           this.$store.commit("setUser", updatedUser);
         })
-        .catch(err => console.error(err));
+        .catch(error => {
+          console.log(error);
+        });
     },
     handleUnlikePost() {
       const variables = {
@@ -205,7 +207,9 @@ export default {
           };
           this.$store.commit("setUser", updatedUser);
         })
-        .catch(err => console.error(err));
+        .catch(error => {
+          console.log(error);
+        });
     },
     handleAddPostMessage() {
       if (this.$refs.form.validate()) {
@@ -234,7 +238,6 @@ export default {
           .then(({ data }) => {
             // limpiar el input del comentario
             this.$refs.form.reset();
-            console.log(data.addPostMessage);
           })
           .catch(error => {
             console.log(error);

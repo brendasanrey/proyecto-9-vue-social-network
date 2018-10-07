@@ -10,7 +10,7 @@
     <!-- formulario -->
     <v-layout row wrpa mt-3>
       <v-flex xs12 sm8 offset-sm2>
-        <v-card color="secondary" dark>
+        <v-card color="accent" dark>
           <v-container>
             <v-form v-model="isValidForm" lazy-validation ref="form" @submit.prevent="handleSignupUser">
 

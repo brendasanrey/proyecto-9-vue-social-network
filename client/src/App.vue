@@ -44,9 +44,9 @@
         </v-btn>
         <!-- boton perfil -->
         <v-btn flat to="/profile" v-if="user">
-          <v-icon center class="mr-2">account_box</v-icon> perfil
-          <v-badge right color="blue darken-2">
-            <!-- <span slot="badge">1</span> -->
+          <v-icon center class="mr-2">account_box</v-icon>
+          <v-badge right color="info" class="mr-3">
+            <span slot="badge" v-if="userFavorites.length" :class="{'bounce': badgeAnimated}">{{userFavorites.length}}</span>perfil
           </v-badge>
         </v-btn>
       </v-toolbar-items>
@@ -96,7 +96,8 @@ export default {
     return {
       sideNav: false,
       authSnackbar: false,
-      authErrorSnackbar: false
+      authErrorSnackbar: false,
+      badgeAnimated: false
     };
   },
   watch: {
@@ -111,13 +112,20 @@ export default {
       if (value !== null) {
         this.authErrorSnackbar = true;
       }
+    },
+    userFavorites(value) {
+      if (value) {
+        this.badgeAnimated = true;
+        setTimeout(() => {
+          this.badgeAnimated = false;
+        }, 1000);
+      }
     }
   },
   computed: {
-    ...mapGetters(["authError", "user"]),
+    ...mapGetters(["authError", "user", "userFavorites"]),
     itemsOfNav() {
       let iconOfNav = [
-        // { icon: "photo_library", title: "inicio", link: "/posts" },
         { icon: "input", title: "Ingresar", link: "/signin" },
         { icon: "person_add", title: "Registrarse", link: "/signup" }
       ];
@@ -136,16 +144,15 @@ export default {
     },
     itemsOfSideNav() {
       let iconOfNav = [
-        { icon: "photo_library", title: "Publicaciones", link: "/posts" },
         { icon: "input", title: "Ingresar", link: "/signin" },
         { icon: "person_add", title: "Registrarse", link: "/signup" }
       ];
       if (this.user) {
         iconOfNav = iconOfNav = [
-          { icon: "photo_library", title: "Publicaciones", link: "/posts" },
+          { icon: "photo_library", title: "Inicio", link: "/posts" },
           {
             icon: "add_photo_alternate",
-            title: "Nueva publicación",
+            title: "Publicar",
             link: "/posts/add"
           },
           { icon: "account_circle", title: "Perfil", link: "/profile" }
@@ -180,5 +187,28 @@ export default {
 .fade-leave-active {
   opacity: 0;
   transform: translate(-20px);
+}
+
+.bounce {
+  animation: bounce 1s both;
+}
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  45% {
+    transform: translate3d(0, -20px, 0);
+  }
+  70% {
+    transform: translate3d(0, -10px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
 }
 </style>
