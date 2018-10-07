@@ -99,6 +99,48 @@ module.exports = {
       });
       return post.messages[0];
     },
+    likePost: async (_, { postId, username }, { Post, User }) => {
+      // Encuentra el post para añadir +1 al campo 'likes'
+      const post = await Post.findOneAndUpdate(
+        // Hace busqueda por ID
+        { _id: postId },
+        { $inc: { likes: 1 } },
+        { new: true }
+      );
+      // Encuentra al usuario activo y agrega el post a su array de favoritos
+      const user = await User.findOneAndUpdate(
+        // Hace busqueda por username
+        { username },
+        { $addToSet: { favorites: postId } },
+        { new: true }
+      ).populate({
+        path: "favorites",
+        model: "Post"
+      });
+      // Retorna los likes que tiene el post y el arreglo de favoritos del usuario
+      return { likes: post.likes, favorites: user.favorites };
+    },
+    unlikePost: async (_, { postId, username }, { Post, User }) => {
+      // Encuentra el post para quitar -1 al campo 'likes'
+      const post = await Post.findOneAndUpdate(
+        // Hace busqueda por ID
+        { _id: postId },
+        { $inc: { likes: -1 } },
+        { new: true }
+      );
+      // Encuentra al usuario activo y elimina el post a su array de favoritos
+      const user = await User.findOneAndUpdate(
+        // Hace busqueda por username
+        { username },
+        { $pull: { favorites: postId } },
+        { new: true }
+      ).populate({
+        path: "favorites",
+        model: "Post"
+      });
+      // Retorna los likes que tiene el post y el arreglo de favoritos del usuario
+      return { likes: post.likes, favorites: user.favorites };
+    },
     signupUser: async (_, { username, email, password }, { User }) => {
       // Verifica si ya existe un usuario con ese nombre
       const user = await User.findOne({
