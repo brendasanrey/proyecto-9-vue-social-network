@@ -73,12 +73,9 @@ module.exports = {
         const searchResults = await Post.find(
           { $text: { $search: searchTerm } },
           { score: { $meta: "textScore" } }
-          // Con sort se ordenan los resultados primero por el 'score' y después por el número de likes
         )
-          .sort({
-            score: { $meta: "textScore" },
-            likes: "desc"
-          })
+          // Con sort se ordenan los resultados primero por el 'score' y después por el número de likes
+          .sort({ score: { $meta: "textScore" }, likes: "desc" })
           // Limitar el numero de resultados a 5
           .limit(5);
         return searchResults;

@@ -60,6 +60,9 @@
             <v-list-tile-title>{{result.title}} -
               <span class="font-weight-thin">{{formatDescription(result.description)}}</span>
             </v-list-tile-title>
+            <v-list-tile-action v-if="checkIfUserFavorite(result._id)">
+              <v-icon>thumb_up</v-icon>
+            </v-list-tile-action>
           </v-list-tile>
         </v-list>
       </v-card>
@@ -198,6 +201,12 @@ export default {
       this.$router.push(`/posts/${resultId}`);
       // Limpiar los resultados de la busqueda
       this.$store.commit("clearSearchResults");
+    },
+    checkIfUserFavorite(resultId) {
+      return (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === resultId)
+      );
     }
   }
 };
