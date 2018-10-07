@@ -51,4 +51,10 @@ const PostSchema = new mongoose.Schema({
   ]
 });
 
+// Creando un index para poder realizar busquedas por todos los campos que contiene el modelo 'Post'
+PostSchema.index({
+  // '$**' --> selecciona todos los campos
+  "$**": "text"
+});
+
 module.exports = mongoose.model("Post", PostSchema);

@@ -188,7 +188,7 @@ export default {
   opacity: 0;
   transform: translate(-20px);
 }
-
+/* Animacion para badge con numero de favoritos */
 .bounce {
   animation: bounce 1s both;
 }
