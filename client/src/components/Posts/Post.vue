@@ -9,7 +9,7 @@
           </v-tooltip>
           <v-card-title>
             <h1>{{getPost.title}}</h1>
-            <v-icon large color="grey" class="ml-3">thumb_up</v-icon>
+            <v-icon large color="grey" class="ml-3" @click="handleLikePost">thumb_up</v-icon>
             <h2 class="mx-2 font-weight-medium grey--text">{{getPost.likes}}</h2>
             <v-spacer></v-spacer>
             <v-icon @click="goToPreviousPage" color="grey" large>arrow_back</v-icon>
@@ -85,7 +85,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { GET_POST, ADD_POST_MESSAGE } from "../../queries";
+import {
+  GET_POST,
+  ADD_POST_MESSAGE,
+  LIKE_POST,
+  UNLIKE_POST
+} from "../../queries";
 
 export default {
   name: "Post",
@@ -118,6 +123,35 @@ export default {
     ...mapGetters(["user"])
   },
   methods: {
+    handleLikePost() {
+      const variables = {
+        postId: this.postId,
+        username: this.user.username
+      };
+      this.$apollo
+        .mutate({
+          mutation: LIKE_POST,
+          variables,
+          update: (cache, { data: { likePost } }) => {
+            const data = cache.readQuery({
+              query: GET_POST,
+              variables: { postId: this.postId }
+            });
+            data.getPost.likes += 1;
+            cache.writeQuery({
+              query: GET_POST,
+              variables: { postId: this.postId },
+              data
+            });
+          }
+        })
+        .then(({ data }) => {
+          console.log(data.likePost);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     handleAddPostMessage() {
       if (this.$refs.form.validate()) {
         const variables = {
