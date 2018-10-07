@@ -40,22 +40,22 @@
       <!-- iconos -->
       <v-toolbar-items class="mr-md-4 mr-0 hidden-xs-only">
         <v-btn flat v-for="item in itemsOfNav" :key="item.title" :to="item.link">
-          <v-icon center>{{item.icon}}</v-icon>
+          <v-icon center class="mr-2">{{item.icon}}</v-icon>{{item.title}}
         </v-btn>
         <!-- boton perfil -->
         <v-btn flat to="/profile" v-if="user">
-          <v-icon center>account_box</v-icon>
+          <v-icon center class="mr-2">account_box</v-icon> perfil
           <v-badge right color="blue darken-2">
             <!-- <span slot="badge">1</span> -->
           </v-badge>
         </v-btn>
       </v-toolbar-items>
       <!-- busqueda -->
-      <v-text-field prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details></v-text-field>
+      <v-text-field v-if="user" prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details></v-text-field>
       <!-- boton salir -->
       <v-toolbar-items class="mr-md-4 mr-0 hidden-xs-only">
         <v-btn flat v-if="user" @click="handleSignOutUser">
-          <v-icon center>exit_to_app</v-icon>
+          <v-icon center class="mr-2">exit_to_app</v-icon>salir
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
@@ -66,13 +66,13 @@
           <router-view/>
         </transition>
         <!-- snackbar de inicio de sesión (notificaciones emergentes) -->
-        <!-- <v-snackbar v-model="authSnackbar" color="success" bottom left :timeout="5000">
+        <v-snackbar v-model="authSnackbar" color="success" bottom left :timeout="5000">
           <v-icon class="mt5">check_circle</v-icon>
           <h3>Ha ingresado exitosamente</h3>
           <v-btn dark flat @click="authSnackbar = false">
             <v-icon>close</v-icon>
           </v-btn>
-        </v-snackbar> -->
+        </v-snackbar>
 
         <!-- snackbar de error en autentificación-->
         <v-snackbar v-if="authError" v-model="authErrorSnackbar" color="error" bottom left :timeout="5000">
@@ -117,17 +117,17 @@ export default {
     ...mapGetters(["authError", "user"]),
     itemsOfNav() {
       let iconOfNav = [
-        { icon: "photo_library", title: "Publicaciones", link: "/posts" },
+        // { icon: "photo_library", title: "inicio", link: "/posts" },
         { icon: "input", title: "Ingresar", link: "/signin" },
         { icon: "person_add", title: "Registrarse", link: "/signup" }
       ];
       // Si existe un usuario activo, cambia los iconos de la barra
       if (this.user) {
         iconOfNav = [
-          { icon: "photo_library", title: "Publicaciones", link: "/posts" },
+          { icon: "photo_library", title: "Inicio", link: "/posts" },
           {
             icon: "add_photo_alternate",
-            title: "Nueva publicación",
+            title: "Publicar",
             link: "/posts/add"
           }
         ];

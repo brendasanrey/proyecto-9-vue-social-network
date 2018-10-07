@@ -28,18 +28,21 @@ export default new Router({
     {
       path: "/posts",
       name: "Posts",
-      component: Posts
+      component: Posts,
+      beforeEnter: AuthGuard
     },
     {
       path: "/posts/add",
       name: "AddPost",
-      component: AddPost
+      component: AddPost,
+      beforeEnter: AuthGuard
     },
     {
       path: "/posts/:postId",
       name: "Post",
       component: Post,
-      props: true
+      props: true,
+      beforeEnter: AuthGuard
     },
     {
       path: "/profile",
