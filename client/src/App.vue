@@ -50,8 +50,20 @@
           </v-badge>
         </v-btn>
       </v-toolbar-items>
+
       <!-- busqueda -->
-      <v-text-field v-if="user" prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details></v-text-field>
+      <v-text-field v-model="searchTerm" @input="handleSearchPosts" v-if="user" prepend-icon="search" flex placeholder="Buscar publicaciones" color="accent" single-line hide-details></v-text-field>
+      <!-- card con resultados de busqueda -->
+      <v-card dark v-if="searchResults.length" id="card__search">
+        <v-list>
+          <v-list-tile v-for="result in searchResults" :key="result._id" @click="goToSearchResult(result._id)">
+            <v-list-tile-title>{{result.title}} -
+              <span class="font-weight-thin">{{formatDescription(result.description)}}</span>
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-card>
+
       <!-- boton salir -->
       <v-toolbar-items class="mr-md-4 mr-0 hidden-xs-only">
         <v-btn flat v-if="user" @click="handleSignOutUser">
@@ -97,7 +109,8 @@ export default {
       sideNav: false,
       authSnackbar: false,
       authErrorSnackbar: false,
-      badgeAnimated: false
+      badgeAnimated: false,
+      searchTerm: ""
     };
   },
   watch: {
@@ -123,7 +136,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["authError", "user", "userFavorites"]),
+    ...mapGetters(["authError", "user", "userFavorites", "searchResults"]),
     itemsOfNav() {
       let iconOfNav = [
         { icon: "input", title: "Ingresar", link: "/signin" },
@@ -162,11 +175,29 @@ export default {
     }
   },
   methods: {
+    handleSearchPosts() {
+      this.$store.dispatch("searchPosts", {
+        searchTerm: this.searchTerm
+      });
+    },
+    formatDescription(description) {
+      return description.length > 20
+        ? `${description.slice(0, 20)}...`
+        : description;
+    },
     toggleSideNav() {
       this.sideNav = !this.sideNav;
     },
     handleSignOutUser() {
       this.$store.dispatch("signoutUser");
+    },
+    goToSearchResult(resultId) {
+      // Limpiar la variable searchTerm
+      this.searchTerm = "";
+      // redireccionar a la vista individual del post
+      this.$router.push(`/posts/${resultId}`);
+      // Limpiar los resultados de la busqueda
+      this.$store.commit("clearSearchResults");
     }
   }
 };
@@ -188,6 +219,15 @@ export default {
   opacity: 0;
   transform: translate(-20px);
 }
+
+#card__search {
+  position: absolute;
+  width: 100vw;
+  z-index: 8;
+  top: 100%;
+  left: 0%;
+}
+
 /* Animacion para badge con numero de favoritos */
 .bounce {
   animation: bounce 1s both;
