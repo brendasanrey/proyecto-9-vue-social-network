@@ -58,6 +58,14 @@ type Mutation {
     description: String!
     creatorId: ID!
   ): Post!
+  updateUserPost(
+    postId: ID!
+    userId: ID!
+    title: String!
+    imageUrl: String!
+    description: String!
+    categories: [String]!
+  ): Post!
   likePost(postId: ID!, username: String!): LikesFavorites!
   unlikePost(postId: ID!, username: String!): LikesFavorites!
   addPostMessage(messageBody: String!, userId: ID!, postId: ID!): Message!
