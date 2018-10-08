@@ -38,13 +38,13 @@
 
 <script>
 import { INFINITE_SCROLL_POSTS } from "../../queries";
-const pageSize = 3;
+const pageSize = 6;
 export default {
   name: "Posts",
   data() {
     return {
       pageNum: 1,
-      showMoreEnabled: true
+      // showMoreEnabled: true
     };
   },
   apollo: {
@@ -54,6 +54,11 @@ export default {
         pageNum: 1,
         pageSize
       }
+    }
+  },
+  computed:{
+    showMoreEnabled(){
+      return this.infiniteScrollPosts && this.infiniteScrollPosts.hasMore;
     }
   },
   methods: {
@@ -74,7 +79,7 @@ export default {
           console.log("fetch more result", fetchMoreResult);
           const newPosts = fetchMoreResult.infiniteScrollPosts.posts;
           const hasMore = fetchMoreResult.infiniteScrollPosts.hasMore;
-          this.showMoreEnabled = hasMore;
+          // this.showMoreEnabled = hasMore;
           return {
             infiniteScrollPosts: {
               __typename: prevResult.infiniteScrollPosts.__typename,

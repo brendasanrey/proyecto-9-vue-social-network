@@ -40,7 +40,7 @@
       <v-layout row wrap>
         <v-flex xs12 sm3 v-for="favorite in userFavorites" :key="favorite._id">
           <v-card class="mt-3 ml-1 mr-2" hover>
-            <v-card-media height="30vh" :src="favorite.imageUrl"></v-card-media>
+            <v-card-media @click="goToPost(favorite._id)" height="30vh" :src="favorite.imageUrl"></v-card-media>
             <v-card-text>{{favorite.title}}</v-card-text>
           </v-card>
         </v-flex>
@@ -65,7 +65,7 @@
       <v-layout row wrap>
         <v-flex xs12 sm3 v-for="post in userPosts" :key="post._id">
           <v-card class="mt-3 ml-1 mr-2" hover>
-            <v-card-media height="30vh" :src="post.imageUrl"></v-card-media>
+            <v-card-media @click="goToPost(post._id)" height="30vh" :src="post.imageUrl"></v-card-media>
             <v-card-text>{{post.title}}</v-card-text>
             <v-btn color="accent" small dark class="mb-3" @click="loadPost(post)">
               <v-icon>edit</v-icon>
@@ -204,6 +204,9 @@ export default {
       this.imageUrl = imageUrl;
       this.categories = categories;
       this.description = description;
+    },
+    goToPost(Id){
+      this.$router.push(`/posts/${Id}`);
     }
   }
 };
