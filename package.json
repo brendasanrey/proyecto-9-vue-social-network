@@ -1,7 +1,7 @@
 {
-  "name": "fullstack-vue-graphql-starter",
-  "version": "1.0.0",
-  "description": "Starter for Full-Stack Vue-GraphQL-Apollo Projects",
+  "name": "vue-social-network",
+  "version": "2.0.0",
+  "description": "Social network powered by Vue.js, Node, GrapQL and MogoDB",
   "main": "server.js",
   "scripts": {
     "server": "nodemon server.js",
@@ -9,7 +9,7 @@
     "dev": "concurrently --names \"server,client\" \"npm run server --silent\" \"npm run client --silent\""
   },
   "keywords": [],
-  "author": "Reed Barger",
+  "author": "Brenda Sanrey",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.0.0-rc.7",
