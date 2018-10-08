@@ -190,6 +190,14 @@ export const UNLIKE_POST = gql`
   }
 `;
 
+export const DELETE_USER_POST = gql`
+  mutation($postId: ID!) {
+    deleteUserPost(postId: $postId) {
+      _id
+    }
+  }
+`;
+
 // Queries para usuarios
 
 export const GET_CURRENT_USER = gql`

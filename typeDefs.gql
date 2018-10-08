@@ -66,6 +66,7 @@ type Mutation {
     description: String!
     categories: [String]!
   ): Post!
+  deleteUserPost(postId: ID!): Post!
   likePost(postId: ID!, username: String!): LikesFavorites!
   unlikePost(postId: ID!, username: String!): LikesFavorites!
   addPostMessage(messageBody: String!, userId: ID!, postId: ID!): Message!

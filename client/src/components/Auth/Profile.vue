@@ -67,10 +67,10 @@
           <v-card class="mt-3 ml-1 mr-2" hover>
             <v-card-media height="30vh" :src="post.imageUrl"></v-card-media>
             <v-card-text>{{post.title}}</v-card-text>
-            <v-btn color="accent" small dark class="mb-3" @click="editPostDialog = true">
+            <v-btn color="accent" small dark class="mb-3" @click="loadPost(post)">
               <v-icon>edit</v-icon>
             </v-btn>
-            <v-btn color="error" small dark class="mb-3">
+            <v-btn @click="handleDeleteUserPost(post)" color="error" small dark class="mb-3">
               <v-icon>delete</v-icon>
             </v-btn>
           </v-card>
@@ -114,7 +114,7 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn type="submit" class="success--text" flat>Guardar</v-btn>
+              <v-btn :disabled="!isFormValid" type="submit" class="success--text" flat>Guardar</v-btn>
               <v-btn class="error--text" flat @click="editPostDialog = false">Cancel</v-btn>
             </v-card-actions>
 
@@ -168,7 +168,43 @@ export default {
         userId: this.user._id
       });
     },
-    handleUpdateUserPost() {}
+    handleUpdateUserPost() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch("updateUserPost", {
+          postId: this.postId,
+          userId: this.user._id,
+          title: this.title,
+          imageUrl: this.imageUrl,
+          description: this.description,
+          categories: this.categories
+        });
+        this.editPostDialog = false;
+      }
+    },
+    handleDeleteUserPost(post) {
+      this.loadPost(post, false);
+      const deletePost = window.confirm(
+        "¿Estas seguro de eliminar la publicación?"
+      );
+      if (deletePost) {
+        this.$store.dispatch("deleteUserPost", {
+          postId: this.postId
+        });
+      }
+    },
+    loadPost(
+      { _id, title, imageUrl, categories, description },
+      editPostDialog = true
+    ) {
+      // Abrir el modal
+      this.editPostDialog = editPostDialog;
+      // Cargar los datos de la publicación en los inputs del formulario
+      this.postId = _id;
+      this.title = title;
+      this.imageUrl = imageUrl;
+      this.categories = categories;
+      this.description = description;
+    }
   }
 };
 </script>

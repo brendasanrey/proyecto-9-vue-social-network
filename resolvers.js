@@ -143,6 +143,10 @@ module.exports = {
       );
       return post;
     },
+    deleteUserPost: async (_, { postId }, { Post }) => {
+      const post = await Post.findOneAndRemove({ _id: postId });
+      return post;
+    },
     likePost: async (_, { postId, username }, { Post, User }) => {
       // Encuentra el post para añadir +1 al campo 'likes'
       const post = await Post.findOneAndUpdate(
